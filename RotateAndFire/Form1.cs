@@ -20,17 +20,22 @@ namespace RotateAndFire
         Boolean leftArrowDown, downArrowDown, rightArrowDown, upArrowDown, spaceDown;
 
         //create graphic objects
-        SolidBrush drawBrush = new SolidBrush(Color.Black);
+        SolidBrush bulletBrush = new SolidBrush(Color.White);
+        SolidBrush missileBrush = new SolidBrush(Color.Red);
 
         //bullet objects
         List<Bullet> bullets = new List<Bullet>();
         int bulletSpeed, bulletSize;
 
+        //missile objects
+        List<Missile> missiles = new List<Missile>();
+        int missileSpeed, missileSize;
+
         //hero object
         Character hero;
 
         public Form1()
-        {
+        { 
             InitializeComponent();
             OnStart();
 
@@ -47,12 +52,17 @@ namespace RotateAndFire
             int heightHero = 20;
             int heroAngle = 0;
             int xHero = this.Width / 2 - widthHero / 2;
-            int yHero = this.Height - 80;
+            int yHero = this.Height - 20;
 
             hero = new Character(xHero, yHero, widthHero, heightHero, speedHero, heroAngle);
 
+            //initial starting values for bullet and missile objects
             bulletSpeed = 6;
             bulletSize = 6;
+
+            missileSpeed = 2;
+            missileSize = 6;
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -111,13 +121,19 @@ namespace RotateAndFire
             //rotate left
             if (leftArrowDown)
             {
-                hero.Turn("left");
+                if (hero.angle  > - 50 )
+                {
+                    hero.Turn("left");
+                }
             }
 
             //rotate right
             if (rightArrowDown)
             {
-                hero.Turn("right");
+                if (hero.angle < 50)
+                {
+                    hero.Turn("right");
+                }
             }
             
             //fire bullet
@@ -160,14 +176,14 @@ namespace RotateAndFire
             e.Graphics.RotateTransform(hero.angle);
 
             // draw the object in the middle of the rotated origin point
-            e.Graphics.FillRectangle(drawBrush, 0 - hero.width / 2, 0 - hero.width / 2, hero.width , hero.height );
+            e.Graphics.FillRectangle(bulletBrush, 0 - hero.width / 2, 0 - hero.width / 2, hero.width , hero.height );
 
             //reset to original origin point
             e.Graphics.ResetTransform();
 
             foreach (Bullet b in bullets)
             {
-                e.Graphics.FillEllipse(drawBrush, 
+                e.Graphics.FillEllipse(bulletBrush, 
                     b.x + hero.width/2 - bulletSize/2, b.y + hero.height / 2 - bulletSize / 2, 
                     bulletSize, bulletSize);
             }
