@@ -29,7 +29,7 @@ namespace RotateAndFire
 
         //missile objects
         List<Missile> missiles = new List<Missile>();
-        int missileSpeed, missileSize;
+        public static int missileSpeed, missileSize;
 
         //hero object
         Character hero;
@@ -62,7 +62,6 @@ namespace RotateAndFire
 
             missileSpeed = 2;
             missileSize = 6;
-
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -180,6 +179,14 @@ namespace RotateAndFire
 
             //reset to original origin point
             e.Graphics.ResetTransform();
+
+            foreach (Missile m in missiles)
+            {
+                e.Graphics.FillEllipse(bulletBrush,
+                    m.x + hero.width / 2 - bulletSize / 2, b.y + hero.height / 2 - bulletSize / 2,
+                    bulletSize, bulletSize);
+                //change vars
+            }
 
             foreach (Bullet b in bullets)
             {
