@@ -9,10 +9,18 @@ namespace RotateAndFire
     public class Missile
     {
         public float x, y, size;
-        float xSpeed, ySpeed;
-        int speedMultiplier;
-    }
+        public float missileSpeed, missileSize;
+        public float difficultyMultiplier;
 
+        public Missile(int _x, int _y, int _missileSize, int _missileSpeed, int _difficultyMultiplier)
+        {
+            x = _x;
+            y = _y;
+            missileSpeed = _missileSpeed;
+            missileSize = _missileSize;
+            difficultyMultiplier = _difficultyMultiplier;
+        }
+    }
 }
 
 

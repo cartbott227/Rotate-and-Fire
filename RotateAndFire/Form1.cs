@@ -29,10 +29,13 @@ namespace RotateAndFire
 
         //missile objects
         List<Missile> missiles = new List<Missile>();
-        public static int missileSpeed, missileSize;
+        int x, y, missileSpeed, missileSize, difficultyMultiplier;
 
         //hero object
         Character hero;
+
+        //missile timer
+        int counter = 0;
 
         public Form1()
         { 
@@ -62,6 +65,7 @@ namespace RotateAndFire
 
             missileSpeed = 2;
             missileSize = 6;
+            difficultyMultiplier = 1;        
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -134,6 +138,14 @@ namespace RotateAndFire
                     hero.Turn("right");
                 }
             }
+
+            //spawn missile every 60 ticks
+            if (counter == 60)
+            {
+                //missile object requires float values to draw on screen
+                Missile m = new Missile(50, 50, missileSize, missileSpeed, difficultyMultiplier);
+                missiles.Add(m);
+           }
             
             //fire bullet
             if (spaceDown)
@@ -162,6 +174,12 @@ namespace RotateAndFire
                 bullets[0].OffScreen(bullets, this);     
             }
 
+            //move missile 
+            foreach (Missile m in missiles)
+            {
+                m.MoveMissile();
+            }
+
             //paint the screen
             Refresh();
         }
@@ -183,14 +201,13 @@ namespace RotateAndFire
             foreach (Missile m in missiles)
             {
                 e.Graphics.FillEllipse(bulletBrush,
-                    m.x + hero.width / 2 - bulletSize / 2, b.y + hero.height / 2 - bulletSize / 2,
-                    bulletSize, bulletSize);
-                //change vars
+                    m.x + hero.width / 2 - missileSize / 2, m.y + hero.height / 2 - missileSize / 2,
+                    missileSize, bulletSize);
             }
 
             foreach (Bullet b in bullets)
             {
-                e.Graphics.FillEllipse(bulletBrush, 
+                e.Graphics.FillEllipse(missileBrush, 
                     b.x + hero.width/2 - bulletSize/2, b.y + hero.height / 2 - bulletSize / 2, 
                     bulletSize, bulletSize);
             }
