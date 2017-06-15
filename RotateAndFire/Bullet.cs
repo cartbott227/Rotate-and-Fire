@@ -68,7 +68,7 @@ namespace RotateAndFire
             y += yChange * speedMultiplier;
         }
 
-        public void OffScreen(List<Bullet> bullets, Form f)
+        public void OffScreen(List<Bullet> bullets, UserControl f)
         {
             List<int> toRemove = new List<int>();
 
@@ -89,7 +89,6 @@ namespace RotateAndFire
             {
                 bullets.RemoveAt(i);
             }
-        }
-        
+        }     
     }
 }
