@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace RotateAndFire
 {
@@ -13,6 +14,9 @@ namespace RotateAndFire
     {
         //determines whether a key is being pressed or not - DO NOT CHANGE
         Boolean leftArrowDown, downArrowDown, rightArrowDown, upArrowDown, spaceDown;
+
+        //generate random missile location
+        Random randGen = new Random();
 
         //create graphic objects
         SolidBrush bulletBrush = new SolidBrush(Color.White);
@@ -22,12 +26,24 @@ namespace RotateAndFire
         public List<Bullet> bullets = new List<Bullet>();
         int bulletSpeed, bulletSize;
 
+        //ammo
+        int ammo = 100;
+
+        //lives
+        int lives = 5;
+
         //missile objects
         public List<Missile> missiles = new List<Missile>();
         public int x, y, missileSpeed, missileSize;
 
         //hero object
         Character hero;
+
+        //missile timer
+        public int counter = 0;
+
+        //fire counter 
+        int firecounter = 0;
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
@@ -53,8 +69,8 @@ namespace RotateAndFire
             }
         }
 
-        //missile timer
-        int counter = 0;
+        //place holder 
+
         public GameScreen()
         {
             InitializeComponent();
@@ -63,7 +79,8 @@ namespace RotateAndFire
             //start the timer when the program starts
             gameTimer.Enabled = true;
             gameTimer.Start();
-            this.Focus();
+
+            Form1.sirenPlayer.Play();
         }
 
         public void OnStart()
@@ -85,7 +102,7 @@ namespace RotateAndFire
             missileSpeed = 2;
             missileSize = 15;
 
-            Missile m = new Missile(50, 90, missileSize, missileSpeed, Form1.difficultyMultiplier);
+            Missile m = new Missile(50, 90, missileSize, missileSpeed);
             missiles.Add(m);
         }
 
@@ -124,7 +141,7 @@ namespace RotateAndFire
             //rotate left
             if (leftArrowDown)
             {
-                if (hero.angle > -50)
+                if (hero.angle > -80)
                 {
                     hero.Turn("left");
                 }
@@ -133,18 +150,21 @@ namespace RotateAndFire
             //rotate right
             if (rightArrowDown)
             {
-                if (hero.angle < 50)
+                if (hero.angle < 80)
                 {
                     hero.Turn("right");
                 }
             }
 
             //spawn missile every 60 ticks
-            if (counter == 60)
+            if (counter == Form1.difficulty)
             {
                 //missile object requires float values to draw on screen
-                //Missile m = new Missile(100, 50, missileSize, missileSpeed, difficultyMultiplier);
-                //missiles.Add(m);
+                Missile m = new Missile(randGen.Next(10, this.Width - 10), 0, missileSize, missileSpeed);
+                missiles.Add(m);
+
+                //reset counter
+                counter = 0;
             }
             else
             {
@@ -152,7 +172,7 @@ namespace RotateAndFire
             }
 
             //fire bullet
-            if (spaceDown)
+            if (spaceDown && ammo > 0 && firecounter == 0)
             {
                 //theta measure for angle of fire, (float uses less memory)
                 float thetaAngle = (90 - hero.angle);
@@ -164,6 +184,13 @@ namespace RotateAndFire
                 //bullet object requires float values to draw on screen
                 Bullet b = new Bullet(hero.x, hero.y, bulletSize, bulletSpeed, (float)xStep, (float)-yStep);
                 bullets.Add(b);
+
+                //remove ammo
+                ammo--;
+                ammoLabel.Text = "Ammo: " + ammo.ToString();
+
+                //reset firecounter
+                firecounter = 0;
             }
 
             //move bullet
@@ -172,16 +199,40 @@ namespace RotateAndFire
                 b.Move();
             }
 
+            //move missile
+            foreach (Missile m in missiles)
+            {
+                m.MissileMove();
+            }
+
             if (bullets.Count > 0)
             {
                 //Use the OffScreen method from the first bullet since we know it exists.
-                bullets[0].OffScreen(bullets, this);
+                //bullets[0].OffScreen(bullets, this);
             }
 
+            //remove missile and health when missile hits bottom of screen
+            foreach (Missile m in missiles)
+            {
+                if (m.y > this.Height)
+                {
+                    lives--;
+                    livesLabel.Text = lives.ToString();
+                    missiles.RemoveAt(missiles.IndexOf(m));
+                    break;
+                }
+            }
+
+            if (missiles.Count > 0)
+            {
+                //Use the OffScreen method from the first bullet since we know it exists.
+                missiles[0].OffScreen(missiles, this);
+            }
+     
             BulletsMissilesCollision();
 
             //paint the screen
-            Refresh();
+             Refresh();
         }
 
         public void BulletsMissilesCollision()
@@ -215,6 +266,16 @@ namespace RotateAndFire
                             //add the index value from monsters of the monster that collided
                             missilesToRemove.Add(missiles.IndexOf(m));
                         }
+
+                        //increase score 
+                        Form1.score++;
+                        scoreLabel.Text = "Score: " + Form1.score.ToString();
+
+                        //increase ammo
+                        ammo = ammo + 5;                      
+                        ammoLabel.Text = "Ammo: " + ammo.ToString();
+
+                        Form1.explosionPlayer.Play();
                     }
                 }
             }
@@ -231,6 +292,27 @@ namespace RotateAndFire
             foreach (int i in missilesToRemove)
             {
                 missiles.RemoveAt(i);
+            }
+
+            //game over if out of lives
+            if (lives == 0)
+            {
+                //wait for 1 second
+                Thread.Sleep(1000);
+
+                Form f = this.FindForm();
+                f.Controls.Remove(this);
+
+                // Create an instance of the DifficultyScreen
+                GameoverScreen os = new GameoverScreen();
+
+                // Add the User Control to the Form
+                f.Controls.Add(os);
+                os.Focus();
+
+                gameTimer.Stop();
+
+
             }
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e)

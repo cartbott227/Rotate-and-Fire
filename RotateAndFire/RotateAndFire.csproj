@@ -60,11 +60,30 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameoverScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameoverScreen.Designer.cs">
+      <DependentUpon>GameoverScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GameScreen.Designer.cs">
       <DependentUpon>GameScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Highscore.cs" />
+    <Compile Include="HighscoreScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HighscoreScreen.Designer.cs">
+      <DependentUpon>HighscoreScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InstructionsScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="InstructionsScreen.Designer.cs">
+      <DependentUpon>InstructionsScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="MenuScreen.cs">
       <SubType>UserControl</SubType>
@@ -81,8 +100,17 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GameoverScreen.resx">
+      <DependentUpon>GameoverScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GameScreen.resx">
       <DependentUpon>GameScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HighscoreScreen.resx">
+      <DependentUpon>HighscoreScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InstructionsScreen.resx">
+      <DependentUpon>InstructionsScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuScreen.resx">
       <DependentUpon>MenuScreen.cs</DependentUpon>
@@ -109,6 +137,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Air Raid Siren  Modern SOUND EFFECT.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="highscores.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Explosion 2-SoundBible.com-1641389556 %281%29.wav" />
+    <Content Include="Resources\red_250x250.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

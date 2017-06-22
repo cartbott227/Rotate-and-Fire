@@ -23,17 +23,21 @@ namespace RotateAndFire
         {
             // f is the form that this control is on - ("this" is the current User Control)
             Form f = this.FindForm();
+
             f.Controls.Remove(this);
 
             // Create an instance of the DifficultyScreen
-            DifficultyScreen ds = new DifficultyScreen();
+            InstructionsScreen ts = new InstructionsScreen();
+           
 
             // Add the User Control to the Form
-            f.Controls.Add(ds);
+            f.Controls.Add(ts);
+            ts.Focus();
         }
 
         private void startButton_Enter(object sender, EventArgs e)
         {
+            //change colour of selected button
             startButton.ForeColor = Color.GreenYellow;
             exitButton.ForeColor = Color.White;
             highscoresButton.ForeColor = Color.White;
@@ -41,6 +45,7 @@ namespace RotateAndFire
 
         private void exitButton_Enter(object sender, EventArgs e)
         {
+            //change colour of selected button
             startButton.ForeColor = Color.White;
             exitButton.ForeColor = Color.GreenYellow;
             highscoresButton.ForeColor = Color.White;
@@ -48,6 +53,7 @@ namespace RotateAndFire
 
         private void highscoresButton_Enter(object sender, EventArgs e)
         {
+            //change colour of selected button
             startButton.ForeColor = Color.White;
             exitButton.ForeColor = Color.White;
             highscoresButton.ForeColor = Color.GreenYellow;
@@ -55,13 +61,24 @@ namespace RotateAndFire
 
         private void exitButton_Click(object sender, EventArgs e)
         {
-
+            //close game
             Application.Exit();
         }
 
         private void highscoresButton_Click(object sender, EventArgs e)
         {
+            // f is the form that this control is on - ("this" is the current User Control)
+            Form f = this.FindForm();
 
+            f.Controls.Remove(this);
+
+            // Create an instance of the DifficultyScreen
+            HighscoreScreen hs = new HighscoreScreen();
+
+
+            // Add the User Control to the Form
+            f.Controls.Add(hs);
+            hs.Focus();
         }
 
         private void MenuScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)

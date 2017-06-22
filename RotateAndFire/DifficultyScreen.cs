@@ -17,7 +17,6 @@ namespace RotateAndFire
         public DifficultyScreen()
         {
             InitializeComponent();
-            this.Focus();
         }
 
         private void easyButton_Click(object sender, EventArgs e)
@@ -29,17 +28,15 @@ namespace RotateAndFire
             // Create an instance of the DifficultyScreen
             GameScreen gs = new GameScreen();
 
-            gs.Focus();
-
             // Add the User Control to the Form
             f.Controls.Add(gs);
-
+            gs.Focus();
         }
 
         private void mediumButton_Click(object sender, EventArgs e)
         {
             //set missile speed to 3
-            Form1.difficultyMultiplier = 3;
+            Form1.difficulty = 30;
 
             Form f = this.FindForm();
             f.Controls.Remove(this);
@@ -49,12 +46,16 @@ namespace RotateAndFire
 
             // Add the User Control to the Form
             f.Controls.Add(gs);
+            gs.Focus();
+
+            //change difficulty
+            Form1.difficulty = 30;
         }
 
         private void hardButton_Click(object sender, EventArgs e)
         {
             //set missile speed to 6
-            Form1.difficultyMultiplier = 6;
+            Form1.difficulty = 15;
 
             Form f = this.FindForm();
             f.Controls.Remove(this);
@@ -64,6 +65,10 @@ namespace RotateAndFire
 
             // Add the User Control to the Form
             f.Controls.Add(gs);
+            gs.Focus();
+
+            //change difficulty
+            Form1.difficulty = 15;
         }
 
         private void DifficultyScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
